@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'model/Video.dart';
 import 'secrets.dart';
 import 'dart:convert';
 
@@ -16,7 +17,13 @@ class API {
 
     if (response.statusCode == 200) {
       Map<String, dynamic> dadosJson = json.decode(response.body);
-      print("resultado: " + dadosJson["items"][0].toString());
+      List<Video> videos = dadosJson["items"].map<Video>((map) {
+        return Video.fromJson(map);
+      }).toList();
+
+      for (var video in videos) {
+        print("resultado: " + video.titulo!);
+      }
     } else {
       print("resultado: ");
     }
