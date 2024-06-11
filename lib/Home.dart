@@ -30,7 +30,10 @@ class _HomeState extends State<Home> {
           IconButton(onPressed: () {}, icon: Icon(Icons.account_circle))
         ],
       ),
-      body: telas[_indiceAtual],
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: telas[_indiceAtual],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _indiceAtual,
