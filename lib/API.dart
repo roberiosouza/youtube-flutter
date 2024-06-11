@@ -4,7 +4,7 @@ import 'secrets.dart';
 import 'dart:convert';
 
 class API {
-  pesquisar(String pesquisa) async {
+  Future<List<Video>> pesquisar(String pesquisa) async {
     var url = Uri.parse(URL_BASE +
         "/search?part=snippet"
             "&type=video"
@@ -21,11 +21,9 @@ class API {
         return Video.fromJson(map);
       }).toList();
 
-      for (var video in videos) {
-        print("resultado: " + video.titulo!);
-      }
-    } else {
-      print("resultado: ");
+      return videos;
     }
+
+    return [];
   }
 }
