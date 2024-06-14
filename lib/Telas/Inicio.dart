@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:youtube_flutter/Telas/Player.dart';
 import 'package:youtube_flutter/model/Video.dart';
 
 import '../API.dart';
 
 class Inicio extends StatefulWidget {
-  const Inicio({super.key});
+  String pesquisa;
+  Inicio({super.key, required this.pesquisa});
 
   @override
   State<Inicio> createState() => _InicioState();
 }
 
 class _InicioState extends State<Inicio> {
-  _listarVideos() {
+  _listarVideos(String pesquisa) {
     API api = API();
-    return api.pesquisar("");
+    return api.pesquisar(pesquisa);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Video>>(
-        future: _listarVideos(),
+        future: _listarVideos(widget.pesquisa),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -33,21 +35,31 @@ class _InicioState extends State<Inicio> {
               if (snapshot.hasData) {
                 return ListView.separated(
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                        snapshot.data![index].imagem!))),
-                          ),
-                          ListTile(
-                            title: Text(snapshot.data![index].titulo!),
-                            subtitle: Text(snapshot.data![index].canal!),
-                          )
-                        ],
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Player(
+                                      videoId: snapshot.data![index].id!)));
+                          print("clicou no vídeo");
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          snapshot.data![index].imagem!))),
+                            ),
+                            ListTile(
+                              title: Text(snapshot.data![index].titulo!),
+                              subtitle: Text(snapshot.data![index].canal!),
+                            )
+                          ],
+                        ),
                       );
                     },
                     separatorBuilder: (context, index) => Divider(

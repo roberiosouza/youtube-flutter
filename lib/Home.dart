@@ -15,10 +15,29 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _indiceAtual = 0;
-  List<Widget> telas = [Inicio(), EmAlta(), Inscricoes(), Biblioteca()];
+  String _resultado = "";
+
+  late Inicio inicio;
+  late List<Widget> telas;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregaTelas();
+  }
+
+  _carregaTelas() {
+    telas = [
+      Inicio(pesquisa: _resultado),
+      EmAlta(),
+      Inscricoes(),
+      Biblioteca()
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    _carregaTelas();
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -30,6 +49,9 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 String? res = await showSearch(
                     context: context, delegate: CustomSearchDelegate());
+                setState(() {
+                  _resultado = res!;
+                });
               },
               icon: Icon(Icons.search)),
           /* IconButton(onPressed: () {}, icon: Icon(Icons.videocam)),
